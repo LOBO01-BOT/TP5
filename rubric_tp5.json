@@ -1,0 +1,115 @@
+{
+  "tp_metadata": {
+    "tp_id": "LAB1-2026-TP5",
+    "title": "TP N° 5: Lógica de Primer Orden y Programación Lógica",
+    "catedra": "Laboratorio I - Tecnicatura Universitaria en Automatización y Robótica / Informática",
+    "version": "1.0.0"
+  },
+  "security": {
+    "algorithm": "SHA-256 + Salted HMAC",
+    "protected": true
+  },
+  "max_score": 100,
+  "exercises": {
+    "ej1_ontologia_lpo": {
+      "weight": 10,
+      "feedback": "La lógica de primer orden asume un compromiso ontológico donde el mundo contiene objetos, relaciones entre objetos y funciones que mapean objetos a otros objetos, superando la limitación de hechos atómicos de la lógica proposicional (R&N Cap. 8.1, Clase 6 Slide 2).",
+      "hashes": {
+        "ontologia_lpo": "77c8dd152d9bd17da320a3a97ad29929266aca7a9a2ea3fcc3cd35f3512dbaf9",
+        "ontologia_proposicional": "e60c5ee352bca560807405a3919813921f47c94c31976c53b94708533c556788",
+        "tipo_relacion": "b00d0f5bcbfac1e34b8d1229494f0c5ebb8d552ce86f2c7c7dd1710ee137de6f",
+        "tipo_funcion": "24f9668d78fc64647e2aee2fc391bba21cae563c480edae10cf45e5c034a9066"
+      }
+    },
+    "ej2_sintaxis_lpo": {
+      "weight": 10,
+      "feedback": "La sintaxis de LPO se compone de constantes (objetos particulares), variables (cuantificación), funciones (retornan objetos), predicados (relaciones booleanas) y conectivos lógicos (R&N Cap. 8.2, Clase 6 Slides 3-5).",
+      "hashes": {
+        "expr_john": "3660c48105283d5e973a4053d442c912429292a8001d15858e4b322c87ce726e",
+        "expr_hermano_jr": "1f7578ebeec6b46dbc6b2b103237048af98f45b7146ef907f3878d57af4b1c4e",
+        "expr_pierna_richard": "1974b0064f81b4237d08ab665d5ecefffb55707423cdc169e0b94867c4b34064",
+        "expr_var_x": "719a2bf8db3d78e5bfcd46aababe1c55df6be90416cc875f2511c1670a544f99",
+        "expr_compuesta_implica": "426d6feac7c7438a201c55b338e3d87f9a3512673481fd9b92bf4a6feee77144"
+      }
+    },
+    "ej3_semantica_modelos": {
+      "weight": 10,
+      "feedback": "En LPO, un modelo formal contiene un dominio de objetos y relaciones. Una interpretación asigna constantes a objetos, funciones a operaciones y predicados a relaciones; una sentencia atómica es verdadera sii los objetos referidos por sus términos pertenecen a la relación correspondiente (R&N Cap. 8.2, Clase 6 Slides 6-7).",
+      "hashes": {
+        "concepto_modelo": "7ee9309ab1b3a91dc044e3fab0a0aa2aee7aaa563eca56d636dbddb1ba25b60a",
+        "concepto_interpretacion": "9e296abf4cb14b63366d9868019135f02ddaaf0d6bea29396cafefd44d9814ba",
+        "condicion_verdad_atomica": "8a3edd6ceec786bea1a459ab00a02c03d9a31bc65539e0bdfac7faa25934b08a"
+      }
+    },
+    "ej4_cuantificadores_conectores": {
+      "weight": 10,
+      "feedback": "El cuantificador universal ∀ se asocia típicamente con la implicación ⇒; usar ∧ afirma erróneamente que todos los objetos del universo poseen ambas propiedades. El cuantificador existencial ∃ se asocia típicamente con la conjunción ∧; usar ⇒ genera una sentencia trivialmente verdadera con cualquier objeto que haga falso el antecedente (R&N Cap. 8.2-8.3, Clase 6 Slides 8-11).",
+      "hashes": {
+        "conector_universal": "26516c36aec7599c5fe7989ae61046f1c4addf7efac05d18e1baabc0ff629a2b",
+        "error_universal_conjuncion": "08a776b6f70b411af470020f8f6687de6b8df34305955a9973e507090fdc96e4",
+        "conector_existencial": "72b0cfdc7c356c4f51d06fef016f3cb5d8914bb582703c88f81d68764dce69b1",
+        "error_existencial_implicacion": "959cecabd122fc16e9fbae394c1681f1315c8035050c99aa5d8f1ac22841bab2"
+      }
+    },
+    "ej5_propiedades_cuantificadores": {
+      "weight": 10,
+      "feedback": "Cuantificadores contiguos del mismo tipo conmutan libremente (∀x ∀y ≡ ∀y ∀x; ∃x ∃y ≡ ∃y ∃x), pero cuantificadores mixtos no conmutan (∃x ∀y Ama(x,y) no equivale a ∀y ∃x Ama(x,y)). La dualidad de De Morgan establece que ∀x P(x) ≡ ¬∃x ¬P(x) y ∃x P(x) ≡ ¬∀x ¬P(x) (R&N Cap. 8.2, Clase 6 Slide 12).",
+      "hashes": {
+        "conmutatividad_iguales": "4b2d8776c6558f9c0ab213311fc5253da5555d01a86e3248494545764c62342b",
+        "cuantificadores_mixtos": "2e07306e87b391f24ca7f1620b2b417135088fd60ed91ad311e6a7a3d060fd24",
+        "dualidad_universal": "2587d0a5e2cb6e1043b0b07e414ddc19b8ce5e16e907810465daf4498ba644d5",
+        "dualidad_existencial": "c0a5e5f65a3003f3a98316860560c31badf655bf211deedfb311bdbbdaa5b521"
+      }
+    },
+    "ej6_igualdad_familia": {
+      "weight": 10,
+      "feedback": "El símbolo de igualdad = establece identidad ontológica entre dos términos. En el dominio de la familia, es indispensable exigir ¬(x = y) para evitar que una persona sea su propio hermano o se case consigo misma (R&N Cap. 8.3-8.4, Clase 6 Slides 13-14).",
+      "hashes": {
+        "rol_igualdad_hermano": "cc15b842efdc495f8b13de31e7c416d8e336ad3f186de6821f2d01a9295c4674",
+        "definicion_madre": "3ab4f6d92c5b6ad8261528acc34771914ece7edbb25eb4d6b4322856229acccb",
+        "definicion_abuelo": "83e6bb25121cbef9f30bbb46608b80c0628679a1247a48072b728b6ea06059a9",
+        "definicion_marido": "a6c86a6d2dbad6b435f3f3496bed36b12acf1bdd0e0b3f9e9be2cd3b1f89ae67"
+      }
+    },
+    "ej7_reduccion_proposicional": {
+      "weight": 10,
+      "feedback": "La proposicionalización usa Instanciación Universal y Skolemización (EI) para transformar LPO en lógica proposicional. Sin embargo, ante la presencia de símbolos de funciones (como Padre(x)), el universo de Herbrand se vuelve infinito generando infinitas sentencias proposicionales, además de una explosión combinatoria de sentencias irrelevantes (R&N Cap. 9.1, Clase 6 Slides 15-16).",
+      "hashes": {
+        "mecanismo_ui": "1f3e1d7f183417b379265f66c98e9f4b0fcc62460e8e7d6903e5da5dfd4941ab",
+        "mecanismo_ei_skolem": "0c7f5488ca9739e102f17af4e6a474bdc79c2741ac1fe96a5adfc46503e8cc47",
+        "problema_funciones_infinitas": "a80a21173387ffee36014bbfdb8a35a763dfc234d72e04b3338cf1deff4a1fce",
+        "problema_irrelevancia": "b924f6e3731c9502520c242d7679a89319e1fcfffbf691f62f0ff6e90cc029e8"
+      }
+    },
+    "ej8_caso_coronel_west": {
+      "weight": 10,
+      "feedback": "En la KB formal del Coronel West (R&N Cap. 9.2, Clase 6 Slides 17-24): la existencia de misiles se skolemiza con una constante nueva M1; la venta se deduce de que todos los misiles de Nono fueron vendidos por West; y la condición criminal surge de Americano(x) ∧ Arma(y) ∧ Vende(x,y,z) ∧ Hostil(z) ⇒ Criminal(x).",
+      "hashes": {
+        "regla_crimen": "1ad6a26e33152ec6f8c7bc5699cf1b05fec91120974526e0f07fd49a2cb156f9",
+        "hecho_misil_arma": "2605aac1de43e4a094cac48229e0789f3f83050b14eb726ba434386be2b42bb9",
+        "regla_enemigo_hostil": "7fec998719e26346908dbd98c0819524cd81e8d6afac26c7f71941efb83c1e38",
+        "eliminacion_existencial_nono": "08745e427716fc0b5f08d9844278f106d37d240cfd127cf29e8c20fe925dc422"
+      }
+    },
+    "ej9_inferencia_forward_backward": {
+      "weight": 10,
+      "feedback": "El encadenamiento hacia adelante aplica Modus Ponens Generalizado desde los hechos iniciales agregando conclusiones hasta alcanzar la meta (data-driven). El encadenamiento hacia atrás parte de la meta (ej. Criminal(West)) y busca recursivamente resolver las premisas como submetas mediante unificación (goal-driven) (R&N Cap. 9.3-9.4, Clase 6 Slides 25-26).",
+      "hashes": {
+        "estrategia_forward": "baa0cb2f41d2239a9bbcf1963c49f0676287742f8cdcc0fc32e63ca1c9ee4568",
+        "estrategia_backward": "859ad3b4aff47078a821fce8af4385d03d0472831e5015a1fc98e0bb76914436",
+        "rol_unificacion": "a8b6dbba9b971210faad340ac73de0259da0ba3f4f1f1718fe59791608e13341",
+        "aplicacion_caso_west": "57690e446210629b0663a02ff5f238270d5669f41acc7010c5312bbe0520c364"
+      }
+    },
+    "ej10_prolog_programacion_logica": {
+      "weight": 10,
+      "feedback": "Prolog materializa la tesis de Kowalski (Algoritmo = Lógica + Control): el usuario provee la lógica (cláusulas de Horn definidas: Cabeza :- Cuerpo) y el motor provee el control mediante encadenamiento hacia atrás en profundidad (DFS) de izquierda a derecha con backtracking y negación como falla bajo el supuesto de mundo cerrado (CWA) (R&N Cap. 9.5, Clase 6 Slides 27-28).",
+      "hashes": {
+        "ecuacion_kowalski": "bb972907fb5d874be07c2952e8247670e73e60c8ec457e9c5bf53ba2bffabbfc",
+        "estructura_clausula": "8bdd0bf2420c4cc2ee30d332cba0f7f560f75636098e701af2138c71d1da85ad",
+        "mecanismo_busqueda_prolog": "e2efddb0ff0cf3d830fa904a65ac577c614101955e21b351d64939180976f566",
+        "negacion_como_falla": "b3c2d4dfd02d60efca66d1314b5278389ef20b12ae2c9bb5f5b5e9b962341c33"
+      }
+    }
+  }
+}

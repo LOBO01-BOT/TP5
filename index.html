@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP N° 5: Lógica de Primer Orden y Programación Lógica - Laboratorio I</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-200 min-h-screen transition-colors glow-bg">
+
+  <!-- Sticky Toolbar -->
+  <div class="sticky-toolbar sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex-1 w-full max-w-xs hidden sm:block">
+        <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1" id="progress-text">0 de 40 completados (0%)</div>
+        <div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-sky-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-open-biblio-all" class="text-sm px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition">📖 Guía Bibliográfica</button>
+        <button id="btn-git-guide" class="text-sm px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition">🐙 Git / Entrega</button>
+        <button id="theme-toggle-btn" class="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition" title="Alternar Modo Oscuro/Claro">🌓</button>
+        <button id="btn-export-json" class="text-sm px-4 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-md transition font-medium">💾 Exportar JSON</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <!-- Encabezado Principal -->
+    <header class="text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+        <span>Laboratorio I</span> • <span>Inteligencia Artificial y Agentes Racionales</span> • <span>UCSE DASS 2026</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-cyan-500 dark:from-sky-400 dark:via-indigo-400 dark:to-cyan-300">
+        TP N° 5: Lógica de Primer Orden y Programación Lógica
+      </h1>
+      <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+        Compromiso ontológico de objetos y relaciones, sintaxis formal, cuantificadores universales y existenciales, ingeniería de parentesco, reducción a inferencia proposicional, formalización del caso del Coronel West, encadenamiento hacia adelante/atrás y ejecución en Prolog.
+      </p>
+    </header>
+
+    <!-- Datos del Estudiante -->
+    <section class="p-6 rounded-2xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 shadow-sm backdrop-blur-sm">
+      <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-200 flex items-center gap-2">
+        <span>👨‍🎓</span> Datos del Estudiante
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre Completo</label>
+          <input type="text" data-student="nombre" placeholder="Ej. Juan Pérez" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Legajo / Matrícula</label>
+          <input type="text" data-student="legajo" placeholder="Ej. 12345" class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+        </div>
+      </div>
+    </section>
+
+    <!-- Listado de 10 Ejercicios -->
+    <div class="space-y-10">
+
+      <!-- ==========================================
+           EJERCICIO 1: Compromiso Ontológico
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 1: Compromiso Ontológico: LPO vs. Lógica Proposicional</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La representación formal del conocimiento depende del compromiso ontológico del lenguaje: la naturaleza de la realidad que asume que existe en el mundo. Relaciona cada modelo lógico con su compromiso ontológico y características funcionales.
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Lógica de Primer Orden (LPO / FOL):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Compromiso ontológico sobre los componentes del mundo.</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_ontologia_lpo" data-key="ontologia_lpo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                <option value="" disabled selected>-- Selecciona el compromiso --</option>
+                <option value="hechos_atomicos_vf">Solo asume hechos atómicos aislados sin estructura interna (Verdadero/Falso)</option>
+                <option value="objetos_relaciones_funciones">Asume que el mundo contiene Objetos, Relaciones entre objetos y Funciones</option>
+                <option value="probabilidades_continuas">Asume grados numéricos de creencia bayesiana continua</option>
+                <option value="estados_sin_relacion">Asume vectores de estados estáticos sin relaciones lógicas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Lógica Proposicional:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Capacidad expresiva y limitación ontológica fundamental.</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_ontologia_lpo" data-key="ontologia_proposicional" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                <option value="" disabled selected>-- Selecciona la limitación --</option>
+                <option value="objetos_relaciones_funciones">Permite cuantificar variables sobre infinitos objetos del mundo</option>
+                <option value="arboles_expansion">Modela la evolución temporal mediante operadores modales</option>
+                <option value="hechos_atomicos_vf">Solo asume hechos que son ciertos o falsos, sin poder referirse a objetos individuales</option>
+                <option value="funciones_recursivas">Implementa funciones de orden superior sobre términos complejos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Concepto formal de "Relación":</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Estructura matemática de predicados como <i>HermanoDe</i> o <i>MayorQue</i>.</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_ontologia_lpo" data-key="tipo_relacion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                <option value="" disabled selected>-- Selecciona la definición --</option>
+                <option value="constante_fija">Un símbolo constante individual que nunca cambia de valor</option>
+                <option value="conjunto_tuplas_objetos">Un conjunto de tuplas de objetos del dominio que satisfacen la relación</option>
+                <option value="conector_booleano">Un conectivo lógico que une dos sentencias independientes</option>
+                <option value="variable_anonima">Una variable auxiliar utilizada exclusivamente en bucles de búsqueda</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Concepto formal de "Función":</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Distinción clave frente a los predicados (ej. <i>PiernaIzquierdaDe</i>).</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej1_ontologia_lpo" data-key="tipo_funcion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                <option value="" disabled selected>-- Selecciona el rol --</option>
+                <option value="retorna_booleano">Evalúa siempre a un valor de verdad Verdadero o Falso</option>
+                <option value="mapeo_unico_objeto">Mapea una tupla de objetos a exactamente un único objeto resultante del dominio</option>
+                <option value="elimina_variables">Elimina todas las variables ligadas en una cláusula de Horn</option>
+                <option value="calcula_heuristica">Calcula la distancia de Manhattan en un espacio de estados</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.1 pp. 240-243):</strong> La naturaleza del compromiso ontológico y epistemológico en lenguajes formales.</p>
+            <p><strong>Presentación Clase 6:</strong> Slide 2 ("Lógica de primer orden - Objetos, Relaciones y Funciones").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 2: Sintaxis Formal de LPO
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 2: Sintaxis Formal de LPO: Clasificación Gramatical</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La gramática de LPO diferencia rigurosamente entre <b>Términos</b> (que refieren a objetos: constantes, variables, funciones) y <b>Sentencias</b> (que afirman hechos y evalúan a verdadero/falso). Clasifica con precisión cada una de las siguientes expresiones sintácticas:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <table class="w-full text-left text-sm text-slate-700 dark:text-slate-300">
+            <thead class="bg-slate-100 dark:bg-slate-800/90 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
+              <tr>
+                <th class="px-4 py-3">Expresión Lógica</th>
+                <th class="px-4 py-3">Naturaleza Formal</th>
+                <th class="px-4 py-3">Clasificación Gramatical Estricta</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900/40">
+              <tr>
+                <td class="px-4 py-3 font-mono text-sky-600 dark:text-sky-400 font-semibold">John</td>
+                <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">Nombre propio que denota un individuo específico</td>
+                <td class="px-4 py-3">
+                  <select data-ex="ej2_sintaxis_lpo" data-key="expr_john" class="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-sky-500">
+                    <option value="" disabled selected>-- Clasificar --</option>
+                    <option value="simbolo_predicado">Símbolo de Predicado booleano</option>
+                    <option value="simbolo_constante">Símbolo de Constante (Término que refiere a un objeto)</option>
+                    <option value="variable_logica">Variable lógica universal</option>
+                    <option value="sentencia_atomica">Sentencia Atómica completa</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-sky-600 dark:text-sky-400 font-semibold">Hermano(John, Richard)</td>
+                <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">Símbolo de relación aplicado a una tupla de términos</td>
+                <td class="px-4 py-3">
+                  <select data-ex="ej2_sintaxis_lpo" data-key="expr_hermano_jr" class="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-sky-500">
+                    <option value="" disabled selected>-- Clasificar --</option>
+                    <option value="simbolo_funcion">Símbolo de Función aritmética</option>
+                    <option value="simbolo_constante">Constante individual compuesta</option>
+                    <option value="sentencia_atomica">Sentencia Atómica (afirma un hecho y evalúa a V/F)</option>
+                    <option value="sentencia_compuesta">Sentencia Compuesta con conectivo binario</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-sky-600 dark:text-sky-400 font-semibold">PiernaIzquierdaDe(Richard)</td>
+                <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">Operador que refiere a la extremidad corporal de Richard</td>
+                <td class="px-4 py-3">
+                  <select data-ex="ej2_sintaxis_lpo" data-key="expr_pierna_richard" class="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-sky-500">
+                    <option value="" disabled selected>-- Clasificar --</option>
+                    <option value="sentencia_atomica">Sentencia Atómica que evalúa a verdadero</option>
+                    <option value="simbolo_funcion">Símbolo de Función / Término complejo (denota un objeto)</option>
+                    <option value="simbolo_predicado">Predicado unario booleano</option>
+                    <option value="variable_ligada">Variable de Skolem ligada</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-sky-600 dark:text-sky-400 font-semibold"><i>x</i> (en &forall;<i>x</i> ...)</td>
+                <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">Símbolo que toma el valor de cualquier objeto del dominio</td>
+                <td class="px-4 py-3">
+                  <select data-ex="ej2_sintaxis_lpo" data-key="expr_var_x" class="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-sky-500">
+                    <option value="" disabled selected>-- Clasificar --</option>
+                    <option value="simbolo_constante">Constante inmutable del sistema</option>
+                    <option value="variable_logica">Variable lógica (parámetro de cuantificación o unificación)</option>
+                    <option value="sentencia_compuesta">Sentencia de cuantificación libre</option>
+                    <option value="simbolo_predicado">Símbolo de Predicado sin argumentos</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-mono text-sky-600 dark:text-sky-400 font-semibold">Hermano(John, Richard) &rArr; Hermano(Richard, John)</td>
+                <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">Dos sentencias atómicas enlazadas por el conectivo de implicación</td>
+                <td class="px-4 py-3">
+                  <select data-ex="ej2_sintaxis_lpo" data-key="expr_compuesta_implica" class="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-sky-500">
+                    <option value="" disabled selected>-- Clasificar --</option>
+                    <option value="sentencia_atomica">Sentencia Atómica relacional</option>
+                    <option value="termino_complejo">Término funcional anidado</option>
+                    <option value="sentencia_compuesta">Sentencia Compuesta (construida con conectivos lógicos)</option>
+                    <option value="simbolo_constante">Constante proposicional equivalente</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.2 pp. 244-248):</strong> Sintaxis y semántica de la lógica de primer orden: constantes, predicados, funciones y términos.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 3-5 ("Sintaxis", "Sentencias atómicas", "Sentencias compuestas").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 3: Semántica Formal y Modelos
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 3: Semántica Formal, Modelos e Interpretaciones</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          En LPO, la verdad es relativa a un <b>Modelo</b> y a una <b>Interpretación</b>. Selecciona los fundamentos teóricos que rigen la semántica formal de primer orden:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="text-sky-500 dark:text-sky-400 font-bold text-sm flex items-center gap-1.5">
+              <span>🏛️</span> Concepto de Modelo
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué constituye formalmente un modelo en LPO?</p>
+            <select data-ex="ej3_semantica_modelos" data-key="concepto_modelo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-2 text-xs focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Seleccionar definición --</option>
+              <option value="tabla_verdad">Una matriz booleana estática de 2^n filas de ceros y unos</option>
+              <option value="dominio_objetos_relaciones">Una estructura formal formada por un dominio de objetos y relaciones entre ellos</option>
+              <option value="arbol_minimax">Un árbol de juego con podas alfa-beta y nodos terminales</option>
+              <option value="conjunto_reglas">Un archivo de configuración con directivas de compilación</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="text-sky-500 dark:text-sky-400 font-bold text-sm flex items-center gap-1.5">
+              <span>🗺️</span> Rol de la Interpretación
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué función cumple la interpretación en la semántica?</p>
+            <select data-ex="ej3_semantica_modelos" data-key="concepto_interpretacion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-2 text-xs focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Seleccionar función --</option>
+              <option value="medir_tiempo_cpu">Medir el tiempo en milisegundos que toma inferir una meta</option>
+              <option value="generar_aleatorios">Generar constantes aleatorias durante el proceso de búsqueda</option>
+              <option value="asigna_referentes_simbolos">Asignar referentes del dominio a constantes, relaciones a predicados y funciones a operaciones</option>
+              <option value="invertir_implicaciones">Invertir los consecuentes de las reglas condition-action</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="text-sky-500 dark:text-sky-400 font-bold text-sm flex items-center gap-1.5">
+              <span>⚖️</span> Verdad de Sentencia Atómica
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cuándo <i>P(t₁, ..., tₙ)</i> es Verdadera en un modelo?</p>
+            <select data-ex="ej3_semantica_modelos" data-key="condicion_verdad_atomica" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-2 text-xs focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Seleccionar condición --</option>
+              <option value="variable_instanciada">Siempre que sus argumentos contengan al menos una constante skolemizada</option>
+              <option value="pertenencia_tupla_relacion">Sii los objetos referidos por t₁, ..., tₙ están en la relación referida por P</option>
+              <option value="ausencia_negacion">Solo si la sentencia no está precedida por el símbolo de negación ¬</option>
+              <option value="consenso_modelos">Cuando es verdadera en al menos una fila de la tabla de verdad</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.2 pp. 248-251):</strong> Modelos para la lógica de primer orden y términos semánticos.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 6-7 ("Semántica" y "Ejemplo de modelo: Richard Corazón de León, John y la corona").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 4: Cuantificadores y Errores Clásicos
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 4: Cuantificadores: Conector Canónico y Errores Clásicos a Evitar</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          El uso incorrecto de conectivos lógicos junto a los cuantificadores es la principal fuente de errores de modelado en IA. Demuestra el dominio de las reglas canónicas para &forall; y &exist;:
+        </p>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Cuantificador Universal (&forall;): Conector Natural</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué conectivo es el principal y típicamente asociado a &forall;?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej4_cuantificadores_conectores" data-key="conector_universal" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Conector para ∀ --</option>
+                  <option value="conjuncion_logica">Conjunción (∧)</option>
+                  <option value="implicacion_logica">Implicación lógica (⇒)</option>
+                  <option value="disyuncion_logica">Disyunción inclusiva (∨)</option>
+                  <option value="equivalencia_logica">Equivalencia estricta (⇔)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Error común con &forall;: ¿Por qué NO usar &and;?</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Consecuencia semántica de: <code>&forall;x (En(x, Inglaterra) &and; Listo(x))</code></span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej4_cuantificadores_conectores" data-key="error_universal_conjuncion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Analizar consecuencia --</option>
+                  <option value="sintaxis_invalida">Es un error de compilación sintáctico prohibido en LPO</option>
+                  <option value="afirma_ambos_todos_objetos">Afirma erróneamente que todos los objetos del universo están en Inglaterra Y todos son listos</option>
+                  <option value="vacia_dominio">Obliga a que el dominio de objetos se reduzca a cero elementos</option>
+                  <option value="equivale_a_existencial">Equivale exactamente a afirmar que existe al menos un inglés listo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Cuantificador Existencial (&exist;): Conector Natural</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué conectivo es el principal y típicamente asociado a &exist;?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej4_cuantificadores_conectores" data-key="conector_existencial" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Conector para ∃ --</option>
+                  <option value="implicacion_logica">Implicación condicional (⇒)</option>
+                  <option value="disyuncion_exclusiva">Disyunción exclusiva (XOR)</option>
+                  <option value="conjuncion_logica">Conjunción lógica (∧)</option>
+                  <option value="negacion_conjunta">Negación conjunta (NOR)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Error común con &exist;: ¿Por qué NO usar &rArr;?</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Consecuencia semántica de: <code>&exist;x (En(x, Inglaterra) &rArr; Listo(x))</code></span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej4_cuantificadores_conectores" data-key="error_existencial_implicacion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Analizar consecuencia --</option>
+                  <option value="siempre_falso">La sentencia se vuelve falsa en todos los modelos posibles</option>
+                  <option value="verdadera_objeto_falso_antecedente">Es trivialmente verdadera si existe cualquier objeto que NO esté en Inglaterra (haciendo F ⇒ Q verdadero)</option>
+                  <option value="requiere_todas_constantes">Obliga a instanciar exhaustivamente todas las constantes del modelo</option>
+                  <option value="incompatible_skolem">Impide la aplicación del algoritmo de Skolemización</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.2 pp. 251-255):</strong> Cuantificación universal, existencial y errores comunes a evitar.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 8-11 ("Cuantificación universal", "Error común a evitar", "Cuantificación existencial", "Otro error común a evitar").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 5: Propiedades y Dualidad de Cuantificadores
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 5: Propiedades Algebraicas y Dualidad de Cuantificadores</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Evalúa las propiedades conmutativas y las leyes de dualidad de De Morgan que permiten transformar y simplificar expresiones cuantificadas:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="font-bold text-sm text-slate-800 dark:text-slate-200">
+              1. Cuantificadores del Mismo Tipo: <code>&forall;x &forall;y</code> vs <code>&forall;y &forall;x</code>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Se pueden conmutar libremente cuantificadores idénticos contiguos?</p>
+            <select data-ex="ej5_propiedades_cuantificadores" data-key="conmutatividad_iguales" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Selecciona la propiedad --</option>
+              <option value="nunca_conmutan">Nunca conmutan; alteran el orden de evaluación del motor</option>
+              <option value="siempre_conmutan">Siempre conmutan libremente: ∀x ∀y ≡ ∀y ∀x y ∃x ∃y ≡ ∃y ∃x</option>
+              <option value="solo_finitos">Solo conmutan si el universo contiene un número primo de objetos</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="font-bold text-sm text-slate-800 dark:text-slate-200">
+              2. Cuantificadores Mixtos: <code>&exist;x &forall;y Ama(x,y)</code> vs <code>&forall;y &exist;x Ama(x,y)</code>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué efecto produce alterar el orden de cuantificadores mixtos?</p>
+            <select data-ex="ej5_propiedades_cuantificadores" data-key="cuantificadores_mixtos" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Selecciona el comportamiento --</option>
+              <option value="son_equivalentes">Son estrictamente equivalentes por transitividad lógica</option>
+              <option value="no_conmutan_cambia_significado">NO conmutan; cambia radicalmente el significado ("alguien ama a todos" vs "todos son amados")</option>
+              <option value="anulan_predicado">Anulan automáticamente la validez del predicado Ama(x,y)</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="font-bold text-sm text-slate-800 dark:text-slate-200">
+              3. Dualidad del Universal: <code>&forall;x P(x)</code>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿A qué equivale mediante las Leyes de De Morgan?</p>
+            <select data-ex="ej5_propiedades_cuantificadores" data-key="dualidad_universal" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Equivalencia de De Morgan --</option>
+              <option value="existencial_afirmado">∃x P(x)</option>
+              <option value="negacion_existencial_negado">¬∃x ¬P(x) ("No existe ningún x para el cual P(x) sea falso")</option>
+              <option value="negacion_universal">¬∀x P(x)</option>
+              <option value="universal_negado">∀x ¬P(x)</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <div class="font-bold text-sm text-slate-800 dark:text-slate-200">
+              4. Dualidad del Existencial: <code>&exist;x P(x)</code>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿A qué equivale mediante las Leyes de De Morgan?</p>
+            <select data-ex="ej5_propiedades_cuantificadores" data-key="dualidad_existencial" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Equivalencia de De Morgan --</option>
+              <option value="universal_afirmado">∀x P(x)</option>
+              <option value="negacion_universal_negado">¬∀x ¬P(x) ("No todos los x hacen falso a P(x)")</option>
+              <option value="negacion_existencial">¬∃x P(x)</option>
+              <option value="doble_negacion_pura">P(x) sin cuantificador</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.2 pp. 254-256):</strong> Propiedades de los cuantificadores y conexiones entre ∀ y ∃.</p>
+            <p><strong>Presentación Clase 6:</strong> Slide 12 ("Propiedades de los cuantificadores: Conmutatividad y Dualidad").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 6: Igualdad y Dominio Familia
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 6: Igualdad e Ingeniería del Conocimiento: Dominio de la Familia</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          El símbolo de igualdad <code>=</code> denota identidad física u ontológica entre términos. En la ingeniería de conocimiento del parentesco humano, formaliza las siguientes relaciones genealógicas:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Definición de Hermano(x, y):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Por qué es indispensable incluir <code>&not;(x = y)</code> en la definición?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej6_igualdad_familia" data-key="rol_igualdad_hermano" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Rol de ¬(x = y) --</option>
+                <option value="distinguir_generos">Para determinar si uno es hombre y la otra mujer</option>
+                <option value="evitar_identidad_mismo_objeto">Para evitar que una persona sea su propio hermano al compartir los mismos padres</option>
+                <option value="evitar_recursividad">Para impedir que el algoritmo entre en bucle infinito</option>
+                <option value="garantizar_adopcion">Para dar soporte legal a parentescos no consanguíneos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Definición formal de Madre: <code>Madre(c) = m</code></span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Especificación lógica de la relación madre-hijo.</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej6_igualdad_familia" data-key="definicion_madre" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización de Madre --</option>
+                <option value="esposa_progenitor">Esposa(m, Padre(c)) ∧ Mayor(m, c)</option>
+                <option value="progenitor_femenino_criterio">Femenino(m) ∧ Progenitor(m, c) (m es mujer y progenitora de c)</option>
+                <option value="hermana_mayor">Hermana(m, c) ∧ Adulta(m)</option>
+                <option value="madre_adoptiva">Tutor(m, c) ∧ ViveCon(m, c)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Definición formal de Abuelo(x, y):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se formaliza formalmente el parentesco de abuelo?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej6_igualdad_familia" data-key="definicion_abuelo" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización de Abuelo --</option>
+                <option value="padre_directo">Padre(x, y) ∧ Anciano(x)</option>
+                <option value="progenitor_del_progenitor">∃z (Padre(x, z) ∧ Progenitor(z, y)) (el padre del progenitor de uno)</option>
+                <option value="hermano_del_padre">∃z (Hermano(x, z) ∧ Padre(z, y))</option>
+                <option value="tio_abuelo">∀z (Progenitor(z, y) ⇒ Padre(x, z))</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Definición formal de Marido(x, y):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se formaliza formalmente la relación conyugal masculina?</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej6_igualdad_familia" data-key="definicion_marido" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización de Marido --</option>
+                <option value="progenitor_conjunto">Progenitor(x, Hijo(y)) ∧ Adulto(x)</option>
+                <option value="esposo_genero_masculino">Masculino(x) ∧ Esposo(x, y)</option>
+                <option value="conviviente">ViveCon(x, y) ∧ Mayor(x, y)</option>
+                <option value="pariente_afinidad">Pariente(x, y) ∧ ¬Consanguineo(x, y)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 8.3-8.4 pp. 256-261):</strong> Igualdad e Ingeniería del conocimiento en LPO (El dominio de las relaciones familiares).</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 13-14 ("Igualdad" y "El dominio familia").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 7: Reducción a Inferencia Proposicional
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 7: Reducción a Lógica Proposicional y sus Limitaciones</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La <b>Proposicionalización</b> busca traducir LPO a lógica proposicional mediante instanciaciones. Identifica sus reglas y las razones por las que no es viable como solución general:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Instanciación Universal (UI):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Mecanismo formal de la regla de inferencia UI.</p>
+            <select data-ex="ej7_reduccion_proposicional" data-key="mecanismo_ui" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Mecanismo de UI --</option>
+              <option value="elimina_sin_reemplazar">Elimina la variable cuantificada sin sustituirla por ningún término</option>
+              <option value="sustituye_variable_todo_termino_terreno">Permite sustituir la variable cuantificada universalmente por cualquier término terreno del dominio</option>
+              <option value="genera_tabla_verdad">Construye una tabla de verdad de 2^k columnas</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Skolemización (Eliminación Existencial):</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Cómo se elimina un existencial como <code>&exist;x P(x)</code>?</p>
+            <select data-ex="ej7_reduccion_proposicional" data-key="mecanismo_ei_skolem" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Mecanismo de Skolem --</option>
+              <option value="convierte_en_tautologia">Convierte la expresión en una tautología válida</option>
+              <option value="introduce_constante_skolem_unica">Introduce una constante de Skolem nueva que no haya aparecido previamente en la KB</option>
+              <option value="elimina_el_predicado">Elimina el predicado P(x) de la base de conocimiento</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Limitación con Símbolos Funcionales:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Qué obstáculo insalvable aparece con funciones como <i>Padre(x)</i>?</p>
+            <select data-ex="ej7_reduccion_proposicional" data-key="problema_funciones_infinitas" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Problema de funciones --</option>
+              <option value="incompatibilidad_tipos">Incompatibilidad de tipos de datos entre enteros y cadenas</option>
+              <option value="universo_herbrand_infinito">El Universo de Herbrand se vuelve infinito, generando infinitas proposiciones instanciadas</option>
+              <option value="perdida_transitividad">Pérdida de la propiedad transitiva de la implicación</option>
+            </select>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-3">
+            <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Explosión de Sentencias Irrelevantes:</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">¿Por qué la reducción proposicional satura la memoria?</p>
+            <select data-ex="ej7_reduccion_proposicional" data-key="problema_irrelevancia" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+              <option value="" disabled selected>-- Problema de irrelevancia --</option>
+              <option value="cambia_valores_verdad">Cambia los valores de verdad de las sentencias ciertas</option>
+              <option value="genera_hechos_irrelevantes_meta">Genera una multitud de hechos instanciados irrelevantes que no aportan a la meta</option>
+              <option value="requiere_red_neuronal">Requiere entrenar una red neuronal de retropropagación</option>
+            </select>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.1 pp. 272-277):</strong> Reducción a inferencia proposicional, instanciación universal, existencial y el teorema de Herbrand.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 15-16 ("Reducción a inferencia proposicional" y "Problemas con la reducción a lógica proposicional").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 8: Caso del Coronel West
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 8: Base de Conocimiento de LPO: El Caso del Coronel West</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <div class="p-4 mb-4 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60 text-xs md:text-sm text-sky-900 dark:text-sky-200 leading-relaxed">
+          <strong>Enunciado Canónico (Russell & Norvig Cap. 9.2):</strong><br>
+          <i>"La ley de EE.UU. dice que es un crimen que un ciudadano estadounidense venda armas a naciones hostiles. El país Nono, un enemigo de EE.UU., tiene algunos misiles, y todos sus misiles le fueron vendidos por el Coronel West, quien es ciudadano estadounidense. Se desea probar que el Coronel West es un criminal."</i>
+        </div>
+
+        <div class="space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Regla de la Ley (Crimen):</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Formalización de "Es un crimen para un americano vender armas a naciones hostiles".</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej8_caso_coronel_west" data-key="regla_crimen" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización regla crimen --</option>
+                <option value="disyuncion_crimen">Americano(x) ∨ Arma(y) ∨ Vende(x, y, z) ⇒ Criminal(x)</option>
+                <option value="americano_arma_vende_hostil">Americano(x) ∧ Arma(y) ∧ Vende(x, y, z) ∧ Hostil(z) ⇒ Criminal(x)</option>
+                <option value="consecuente_hostil">Hostil(z) ∧ Vende(West, Misil, z) ⇒ Criminal(West)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Naturaleza de los misiles:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Formalización de "Los misiles son armas".</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej8_caso_coronel_west" data-key="hecho_misil_arma" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización misiles --</option>
+                <option value="arma_implica_misil">Arma(x) ⇒ Misil(x)</option>
+                <option value="misil_implica_arma">Misil(x) ⇒ Arma(x)</option>
+                <option value="igualdad_misil_arma">Misil(x) = Arma(x)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Relación de hostilidad:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Formalización de "Un enemigo de América es un país hostil".</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej8_caso_coronel_west" data-key="regla_enemigo_hostil" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Formalización hostil --</option>
+                <option value="hostil_implica_enemigo">Hostil(x) ⇒ Enemigo(x, América)</option>
+                <option value="enemigo_implica_hostil">Enemigo(x, América) ⇒ Hostil(x)</option>
+                <option value="doble_implicacion_enemigo">Enemigo(Nono, América) ⇔ Americano(x)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-slate-100 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 gap-3">
+            <div class="sm:max-w-md">
+              <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Existencial de los misiles de Nono:</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Eliminación de <code>&exist;x (Tiene(Nono, x) &and; Misil(x))</code> en la KB.</span>
+            </div>
+            <div class="sm:w-80">
+              <select data-ex="ej8_caso_coronel_west" data-key="eliminacion_existencial_nono" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                <option value="" disabled selected>-- Skolemización en KB --</option>
+                <option value="mantiene_variable">Tiene(Nono, x) y Misil(x)</option>
+                <option value="skolemizacion_constante_m1">Tiene(Nono, M1) y Misil(M1) introduciendo la nueva constante de Skolem M1</option>
+                <option value="sustituye_west">Tiene(Nono, West) y Misil(West)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.2 pp. 277-280):</strong> Ejemplo de base de conocimiento: El caso del Coronel West, Nono y los misiles.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 17-24 ("Ejemplo de base de conocimiento" y cláusulas de primer orden).</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 9: Encadenamiento Forward vs Backward
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 9: Inferencia en LPO: Encadenamiento hacia Adelante vs. Hacia Atrás</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          La inferencia en LPO requiere coordinar reglas lógicas con el algoritmo de <b>Unificación</b>. Compara el funcionamiento del Encadenamiento hacia Adelante (Forward Chaining) y hacia Atrás (Backward Chaining):
+        </p>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Estrategia del Encadenamiento hacia Adelante (Forward Chaining):</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo procede para derivar conclusiones en LPO?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej9_inferencia_forward_backward" data-key="estrategia_forward" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Estrategia Forward --</option>
+                  <option value="goal_driven_submetas">Parte de la hipótesis y comprueba sus antecedentes paso a paso</option>
+                  <option value="data_driven_hechos_a_conclusiones">Es Data-Driven: parte de los hechos conocidos y dispara reglas agregando nuevos hechos hasta derivar la meta</option>
+                  <option value="busqueda_adversarios">Simula turnos alternos calculando valores heurísticos minimax</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Estrategia del Encadenamiento hacia Atrás (Backward Chaining):</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo procede al resolver una consulta?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej9_inferencia_forward_backward" data-key="estrategia_backward" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Estrategia Backward --</option>
+                  <option value="data_driven_exhaustivo">Deriva exhaustivamente todas las consecuencias posibles de la KB</option>
+                  <option value="goal_driven_meta_a_submetas">Es Goal-Driven: parte de la consulta y busca recursivamente reglas que la concluyan, estableciendo sus premisas como submetas</option>
+                  <option value="tablas_de_verdad_lpo">Genera una tabla de verdad formal para todas las variables</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Algoritmo de Unificación (UNIFY):</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Cuál es el rol matemático de UNIFY(p, q)?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej9_inferencia_forward_backward" data-key="rol_unificacion" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Rol de Unificación --</option>
+                  <option value="calcula_longitud">Calcula la cantidad de letras de cada literal</option>
+                  <option value="encuentra_sustitucion_hace_identicos">Encuentra una sustitución de variables &theta; que hace que ambas expresiones sean sintácticamente idénticas</option>
+                  <option value="elimina_constantes">Reemplaza las constantes por variables indeterminadas</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Aplicación al caso del Coronel West:</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Por qué Backward Chaining es especialmente eficiente en esta consulta?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej9_inferencia_forward_backward" data-key="aplicacion_caso_west" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Eficiencia en el caso West --</option>
+                  <option value="no_evalua_reglas">No requiere evaluar ninguna regla de la base de conocimiento</option>
+                  <option value="backward_resuelve_solo_relevantes">Se enfoca exclusivamente en las submetas relevantes a Criminal(West), evitando generar hechos ajenos</option>
+                  <option value="elimina_backtracking">Garantiza que nunca se producirá vuelta atrás durante la ejecución</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.3-9.4 pp. 280-291):</strong> Encadenamiento hacia adelante y encadenamiento hacia atrás con Modus Ponens Generalizado.</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 25-26 ("Encadenamiento hacia adelante" y "Encadenamiento hacia atrás").</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ==========================================
+           EJERCICIO 10: Programación Lógica y Prolog
+      =========================================== -->
+      <section class="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold text-sky-600 dark:text-sky-400">Ejercicio 10: Programación Lógica: Fundamentos del Paradigma Prolog</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 font-semibold">10 Puntos</span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Prolog traslada la inferencia de LPO a un paradigma declarativo ejecutable. Identifica los principios rectores de su arquitectura computacional:
+        </p>
+
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">1. Ecuación de Robert Kowalski:</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Principio fundacional de la programación lógica declarativa.</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej10_prolog_programacion_logica" data-key="ecuacion_kowalski" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Ecuación de Kowalski --</option>
+                  <option value="algoritmo_tiempo_espacio">Algoritmo = Tiempo + Espacio</option>
+                  <option value="algoritmo_logica_mas_control">Algoritmo = Lógica + Control (el programador aporta la lógica, el motor el control)</option>
+                  <option value="programa_datos_instrucciones">Programa = Datos + Instrucciones</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">2. Estructura de Cláusula de Horn (<code>Cabeza :- Cuerpo.</code>):</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Lectura semántica del operador <code>:-</code> en Prolog.</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej10_prolog_programacion_logica" data-key="estructura_clausula" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Lectura de la regla --</option>
+                  <option value="cuerpo_si_cabeza">El Cuerpo es verdadero si la Cabeza se cumple</option>
+                  <option value="cabeza_si_cuerpo">La Cabeza es verdadera si todos los literales del Cuerpo son verdaderos</option>
+                  <option value="asignacion_imperativa">Asigna el valor numérico del Cuerpo a la variable de la Cabeza</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">3. Mecanismo de Búsqueda de Prolog:</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Qué estrategia utiliza para recorrer el árbol de resolución SLD?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej10_prolog_programacion_logica" data-key="mecanismo_busqueda_prolog" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Estrategia de búsqueda --</option>
+                  <option value="bfs_anchura_pura">Búsqueda en Anchura Primero (BFS) con cola FIFO</option>
+                  <option value="dfs_backtracking_izq_der">Encadenamiento hacia atrás en Profundidad Primero (DFS) de izquierda a derecha con Backtracking</option>
+                  <option value="a_estrella_heuristico">Búsqueda heurística informada A* con frontera prioritaria</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="sm:max-w-lg">
+                <span class="font-semibold text-slate-800 dark:text-sky-400 text-sm block">4. Negación como Falla (NAF) y Supuesto de Mundo Cerrado (CWA):</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">¿Cómo interpreta Prolog <code>vivo(X) :- \+ muerto(X).</code>?</span>
+              </div>
+              <div class="sm:w-80">
+                <select data-ex="ej10_prolog_programacion_logica" data-key="negacion_como_falla" class="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500">
+                  <option value="" disabled selected>-- Interpretación NAF --</option>
+                  <option value="error_compilacion">Genera un error si la sentencia no está explícitamente probada en una base externa</option>
+                  <option value="asume_falso_si_no_se_prueba">Si no se puede probar que muerto(X) sea cierto en la KB, se asume que es falso (por lo que vivo(X) es verdadero)</option>
+                  <option value="evaluacion_probabilistica">Calcula una probabilidad del 50% de supervivencia</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
+            <span>📖 Dónde estudiar este tema en la bibliografía</span>
+            <span class="transition group-open:rotate-180">▾</span>
+          </summary>
+          <div class="mt-2.5 pt-2.5 border-t border-amber-500/20 space-y-1">
+            <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="underline hover:text-amber-300">Russell & Norvig</a> (Cap. 9.5 pp. 291-296):</strong> Programación lógica y sistemas Prolog (cláusulas de Horn, resolución SLD y negación como falla).</p>
+            <p><strong>Presentación Clase 6:</strong> Slides 27-28 ("Prolog" y "Programación lógica: Prolog").</p>
+          </div>
+        </details>
+      </section>
+
+    </div>
+
+    <!-- Panel Inferior de Finalización y Exportación -->
+    <section class="p-8 rounded-2xl bg-sky-900/10 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800/50 text-center space-y-6">
+      <h3 class="text-2xl font-bold text-sky-700 dark:text-sky-400">Finalizar y Entregar Trabajo Práctico</h3>
+      <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
+        Verifica que tu indicador superior marque el <span class="font-bold text-sky-600 dark:text-sky-400">100% de progreso</span>. Descarga el archivo <span class="font-mono text-sky-600 dark:text-sky-400 font-semibold">respuestas_tp5.json</span>, colócalo en la raíz de tu repositorio clonado y autoevalúate localmente con Python antes del envío final con Git.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <button id="btn-preview-json" class="px-6 py-3 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition font-medium flex items-center justify-center gap-2">
+          <span>👁️</span> Previsualizar JSON en Pantalla
+        </button>
+        <button id="btn-export-json-footer" class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white shadow-lg shadow-sky-600/30 transition font-medium transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+          <span>📥</span> Generar y Descargar respuestas_tp5.json
+        </button>
+      </div>
+
+      <div id="preview-container" class="hidden mt-6 text-left max-w-2xl mx-auto">
+        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl border border-slate-700">
+          <div class="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+            <span class="text-xs text-slate-400 font-mono">respuestas_tp5.json</span>
+            <button id="btn-copy-json" class="text-xs px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded transition font-medium">📋 Copiar al Portapapeles</button>
+          </div>
+          <pre class="p-4 overflow-x-auto text-xs md:text-sm font-mono text-sky-300 max-h-96"><code id="preview-code"></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Bibliografía -->
+  <div id="modal-biblio" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span>📚</span> Guía Bibliográfica Oficial (TP 5)
+        </h3>
+        <button id="close-modal-biblio" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p><strong>Clases Teóricas:</strong> Presentación <span class="font-mono text-sky-600 dark:text-sky-400 font-semibold">6 - Lógica de Primer Orden.pptx</span> (Ing. Fabio D. Argañaraz).</p>
+        <p><strong><a href="http://jdelagarza.fime.uanl.mx/IA/Libros/inteligencia-artificial-un-enfoque-moderno-stuart-j-russell.pdf" target="_blank" rel="noopener noreferrer" class="text-sky-600 dark:text-sky-400 underline hover:text-sky-500 font-medium">Russell & Norvig</a>:</strong></p>
+        <ul class="list-disc pl-5 space-y-1 text-xs md:text-sm">
+          <li><strong>Capítulo 8:</strong> Lógica de Primer Orden (Sintaxis, Semántica, Modelos, Cuantificación ∀ y ∃, Igualdad y Genealogía).</li>
+          <li><strong>Capítulo 9:</strong> Inferencia en LPO (Proposicionalización, Skolem, Unificación, Encadenamiento Forward/Backward y Prolog).</li>
+        </ul>
+        <p class="text-xs text-slate-500 italic pt-2 border-t border-slate-200 dark:border-slate-800">
+          Nota de Cátedra: Preste especial atención a no confundir el conectivo principal de los cuantificadores (⇒ para ∀, y ∧ para ∃).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Git -->
+  <div id="modal-git" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <span>🐙</span> Instructivo de Entrega con Git
+        </h3>
+        <button id="close-modal-git" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+        <p>1. Exporta el archivo <span class="font-mono text-sky-500 font-semibold">respuestas_tp5.json</span> en la raíz de tu repositorio clonado.</p>
+        <p>2. Ejecuta el autoevaluador oficial en tu consola local (requiere Python 3):</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-sky-600 dark:text-sky-300">
+          python autograder_tp5.py respuestas_tp5.json
+        </div>
+        <p>3. Registra tu entrega con Git:</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-slate-800 dark:text-slate-300 space-y-1">
+          <div>git add respuestas_tp5.json</div>
+          <div>git commit -m "Entrega final TP5 - Juan Perez"</div>
+        </div>
+        <p>4. Sube tu entrega a tu repositorio personal en GitHub:</p>
+        <div class="p-3 bg-slate-100 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-slate-800 font-mono text-xs text-sky-600 dark:text-sky-300">
+          git push origin main
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
