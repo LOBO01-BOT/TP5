@@ -32,6 +32,13 @@
 
 ---
 
+## 🔗 Puente hacia la Próxima Clase (Clase 7 / TP6: SWI-Prolog)
+Los conceptos formalizados en este TP5 constituyen la base directa del taller práctico de la **Clase 7 (Lógica aplicada en PROLOG)**:
+- **El Árbol Genealógico:** Las definiciones lógicas de $Abuelo(x, y)$ y $Hermano(x, y)$ con exclusión de identidad $\neg(x = y)$ del Ejercicio 6 serán programadas como reglas ejecutables en SWI-Prolog (`abuelo(X, Y) :- padre(X, Z), progenitor(Z, Y).` y `hermano(X, Y) :- progenitor(P, X), progenitor(P, Y), X \= Y.`) para resolver el árbol propuesto en clase.
+- **Motor de Inferencia y Backtracking:** El Encadenamiento hacia Atrás (Ejercicio 9) y las Cláusulas de Horn con Negación como Falla / Supuesto de Mundo Cerrado (Ejercicio 10) cobrarán vida interactiva mediante el intérprete y la consola `?-` de SWI-Prolog.
+
+---
+
 ## 🚀 Guía de Resolución y Entrega (Git / GitHub)
 
 Este Trabajo Práctico es 100% interactivo y autoevaluable. Sigue estos pasos para resolverlo y acreditar tu entrega:

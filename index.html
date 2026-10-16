@@ -597,6 +597,16 @@
           </div>
         </div>
 
+        <!-- Callout Puente a Clase 7 -->
+        <div class="mt-4 p-3.5 rounded-xl border border-sky-500/30 bg-sky-500/5 text-xs text-slate-700 dark:text-slate-300">
+          <span class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">🔗 Conexión con la Próxima Clase (Clase 7: PROLOG):</span>
+          Esta formulación lógica de parentescos con identidad <code>&not;(x = y)</code> constituye la base exacta del árbol familiar (Consuelo, Víctor, María, etc.) que programarás en la Clase 7 con SWI-Prolog mediante reglas como:
+          <div class="mt-1.5 p-2 bg-slate-900/90 rounded-lg font-mono text-[11px] text-sky-300 border border-slate-700/60 space-y-0.5">
+            <div>abuelo(X, Y) :- padre(X, Z), progenitor(Z, Y).</div>
+            <div>hermano(X, Y) :- progenitor(P, X), progenitor(P, Y), X \= Y.</div>
+          </div>
+        </div>
+
         <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
           <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
             <span>📖 Dónde estudiar este tema en la bibliografía</span>
@@ -942,6 +952,12 @@
           </div>
         </div>
 
+        <!-- Callout Anticipo Clase 7 -->
+        <div class="mt-4 p-3.5 rounded-xl border border-sky-500/30 bg-sky-500/5 text-xs text-slate-700 dark:text-slate-300">
+          <span class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">🔗 Anticipo de la Clase 7: SWI-Prolog en Acción</span>
+          En la próxima clase trasladaremos estas cláusulas de Horn al entorno real de <strong>SWI-Prolog</strong> (Edimburgo): declararemos hechos con átomos en minúsculas (ej. <code>mujer(ana).</code>, <code>valioso(diamante).</code>), variables en mayúsculas (ej. <code>X</code>, <code>Persona</code>), conjunciones con comas (<code>,</code>) y ejecutaremos consultas interactivas en la consola <code>?-</code> aprovechando el motor de backtracking.
+        </div>
+
         <details class="group mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3.5 text-xs text-amber-800 dark:text-amber-200/90 transition-all">
           <summary class="flex cursor-pointer items-center justify-between font-medium text-amber-600 dark:text-amber-400 select-none">
             <span>📖 Dónde estudiar este tema en la bibliografía</span>
@@ -1001,7 +1017,11 @@
           <li><strong>Capítulo 8:</strong> Lógica de Primer Orden (Sintaxis, Semántica, Modelos, Cuantificación ∀ y ∃, Igualdad y Genealogía).</li>
           <li><strong>Capítulo 9:</strong> Inferencia en LPO (Proposicionalización, Skolem, Unificación, Encadenamiento Forward/Backward y Prolog).</li>
         </ul>
-        <p class="text-xs text-slate-500 italic pt-2 border-t border-slate-200 dark:border-slate-800">
+        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+          <p class="font-semibold text-sky-600 dark:text-sky-400">🔗 Próximo Paso (Clase 7 / TP6):</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Presentación <strong>7 - Lógica aplicada en PROLOG.pptx</strong>. Taller práctico con SWI-Prolog: declaración de hechos, reglas con <code>:-</code>, backtracking y desarrollo completo del árbol familiar.</p>
+        </div>
+        <p class="text-xs text-slate-500 italic pt-1 border-t border-slate-200 dark:border-slate-800">
           Nota de Cátedra: Preste especial atención a no confundir el conectivo principal de los cuantificadores (⇒ para ∀, y ∧ para ∃).
         </p>
       </div>
