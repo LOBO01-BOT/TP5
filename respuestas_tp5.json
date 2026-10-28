@@ -1,0 +1,69 @@
+{
+  "tp_id": "LAB1-2026-TP5",
+  "student": {
+    "nombre": "Emanuel Mariano Lobo",
+    "legajo": "38973583"
+  },
+  "answers": {
+    "ej1_ontologia_lpo": {
+      "ontologia_lpo": "objetos_relaciones_funciones",
+      "ontologia_proposicional": "hechos_atomicos_vf",
+      "tipo_relacion": "conjunto_tuplas_objetos",
+      "tipo_funcion": "mapeo_unico_objeto"
+    },
+    "ej2_sintaxis_lpo": {
+      "expr_john": "simbolo_constante",
+      "expr_hermano_jr": "sentencia_atomica",
+      "expr_pierna_richard": "simbolo_funcion",
+      "expr_var_x": "variable_logica",
+      "expr_compuesta_implica": "sentencia_compuesta"
+    },
+    "ej3_semantica_modelos": {
+      "concepto_modelo": "dominio_objetos_relaciones",
+      "concepto_interpretacion": "asigna_referentes_simbolos",
+      "condicion_verdad_atomica": "pertenencia_tupla_relacion"
+    },
+    "ej4_cuantificadores_conectores": {
+      "conector_universal": "implicacion_logica",
+      "error_universal_conjuncion": "afirma_ambos_todos_objetos",
+      "conector_existencial": "conjuncion_logica",
+      "error_existencial_implicacion": "verdadera_objeto_falso_antecedente"
+    },
+    "ej5_propiedades_cuantificadores": {
+      "conmutatividad_iguales": "siempre_conmutan",
+      "cuantificadores_mixtos": "no_conmutan_cambia_significado",
+      "dualidad_universal": "negacion_existencial_negado",
+      "dualidad_existencial": "negacion_universal_negado"
+    },
+    "ej6_igualdad_familia": {
+      "rol_igualdad_hermano": "evitar_identidad_mismo_objeto",
+      "definicion_madre": "progenitor_femenino_criterio",
+      "definicion_abuelo": "progenitor_del_progenitor",
+      "definicion_marido": "esposo_genero_masculino"
+    },
+    "ej7_reduccion_proposicional": {
+      "mecanismo_ui": "sustituye_variable_todo_termino_terreno",
+      "mecanismo_ei_skolem": "introduce_constante_skolem_unica",
+      "problema_funciones_infinitas": "universo_herbrand_infinito",
+      "problema_irrelevancia": "genera_hechos_irrelevantes_meta"
+    },
+    "ej8_caso_coronel_west": {
+      "regla_crimen": "americano_arma_vende_hostil",
+      "hecho_misil_arma": "misil_implica_arma",
+      "regla_enemigo_hostil": "enemigo_implica_hostil",
+      "eliminacion_existencial_nono": "skolemizacion_constante_m1"
+    },
+    "ej9_inferencia_forward_backward": {
+      "estrategia_forward": "data_driven_hechos_a_conclusiones",
+      "estrategia_backward": "goal_driven_meta_a_submetas",
+      "rol_unificacion": "encuentra_sustitucion_hace_identicos",
+      "aplicacion_caso_west": "backward_resuelve_solo_relevantes"
+    },
+    "ej10_prolog_programacion_logica": {
+      "ecuacion_kowalski": "algoritmo_logica_mas_control",
+      "estructura_clausula": "cabeza_si_cuerpo",
+      "mecanismo_busqueda_prolog": "dfs_backtracking_izq_der",
+      "negacion_como_falla": "asume_falso_si_no_se_prueba"
+    }
+  }
+}
